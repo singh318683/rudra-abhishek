@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>रुद्र अभिषेक — पूजा मार्गदर्शक</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0705;--s1:#14100a;--s2:#1c1610;--s3:#241e13;
+  --gold:#c9960c;--gold2:#e8b84b;--gold3:#f5d080;
+  --saf:#d4780a;--cream:#f5e6c8;--mute:#8a7055;
+  --bdr:#3a2a15;--red:#8b1a1a;
+  --green:#1a4a1a;--greenb:#2d7a2d;--greent:#90e090;
+  --tip:#1f1505;--tipb:#6b3a0a;--tipt:#d4a055;
+  --blue:#0a1a3a;--blueb:#1a4a8a;--bluet:#90c0f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--cream);font-family:'Tiro Devanagari Hindi',Georgia,serif;min-height:100vh;overflow-x:hidden}
+
+/* ===== SPLASH SCREEN ===== */
+#splash{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:100;transition:opacity .8s ease;
+}
+#splash.hide{opacity:0;pointer-events:none}
+.splash-om{font-size:80px;color:var(--gold2);animation:omPulse 2s ease-in-out infinite}
+@keyframes omPulse{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.1)}}
+.splash-title{font-family:'Cinzel',serif;font-size:28px;letter-spacing:4px;color:var(--gold2);margin:16px 0 8px;text-align:center}
+.splash-sub{font-size:16px;color:var(--mute);margin-bottom:32px;text-align:center}
+.splash-rings{position:relative;width:120px;height:120px;margin-bottom:32px}
+.ring{position:absolute;border-radius:50%;border:2px solid var(--gold);opacity:0;animation:ringOut 2.4s ease-out infinite}
+.ring:nth-child(1){inset:0;animation-delay:0s}
+.ring:nth-child(2){inset:-15px;animation-delay:.6s}
+.ring:nth-child(3){inset:-30px;animation-delay:1.2s}
+@keyframes ringOut{0%{opacity:.8;transform:scale(.6)}100%{opacity:0;transform:scale(1.4)}}
+.start-btn{
+  padding:14px 40px;border-radius:30px;
+  border:2px solid var(--gold);background:transparent;
+  color:var(--gold2);font-size:18px;cursor:pointer;
+  font-family:'Tiro Devanagari Hindi',serif;
+  transition:all .3s;letter-spacing:1px;
+}
+.start-btn:hover{background:var(--gold);color:#000}
+
+/* ===== MAIN APP ===== */
+#app{display:none;min-height:100vh}
+
+/* ===== TOP BAR ===== */
+.topbar{
+  background:var(--s1);border-bottom:1px solid var(--bdr);
+  padding:.8rem 1rem;display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:50;
+}
+.tb-om{font-size:24px;color:var(--gold2)}
+.tb-info{flex:1}
+.tb-step-label{font-family:'Cinzel',serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--mute)}
+.tb-step-name{font-size:14px;color:var(--cream);font-weight:500}
+.tb-prog-outer{height:4px;background:var(--bdr);border-radius:2px;margin-top:4px}
+.tb-prog-inner{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width .6s ease}
+.tb-count{font-family:'Cinzel',serif;font-size:12px;color:var(--mute);white-space:nowrap}
+
+/* ===== STEP CONTAINER ===== */
+.step-wrap{min-height:100vh;display:flex;flex-direction:column}
+.step-scene{flex:1;display:flex;flex-direction:column;align-items:center;padding:1.5rem 1rem 1rem}
+
+/* ===== ANIMATION STAGE ===== */
+.anim-stage{
+  width:100%;max-width:340px;height:200px;
+  background:var(--s1);border:1px solid var(--bdr);border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.5rem;position:relative;overflow:hidden;
+}
+.anim-icon{font-size:72px;animation:iconFloat 3s ease-in-out infinite}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.anim-ring{
+  position:absolute;width:100px;height:100px;border-radius:50%;
+  border:2px solid var(--gold);opacity:0;
+  animation:aRing 2s ease-out infinite;
+}
+.anim-ring:nth-child(2){animation-delay:.7s}
+.anim-ring:nth-child(3){animation-delay:1.4s}
+@keyframes aRing{0%{opacity:.6;transform:scale(.5)}100%{opacity:0;transform:scale(2)}}
+
+/* water drops animation */
+.drops-wrap{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
+.drop{position:absolute;width:4px;height:10px;background:var(--bluet);border-radius:50%;opacity:0;animation:dropFall 1.5s linear infinite}
+@keyframes dropFall{0%{opacity:1;transform:translateY(-10px)}100%{opacity:0;transform:translateY(180px)}}
+
+/* flame animation */
+.flame-wrap{position:relative;display:flex;align-items:flex-end;justify-content:center;height:100px}
+.flame{width:30px;background:var(--gold);border-radius:50% 50% 20% 20%;animation:flicker 1s ease-in-out infinite alternate}
+@keyframes flicker{0%{height:60px;transform:scaleX(1)}100%{height:80px;transform:scaleX(.8)}}
+.flame::after{content:'';position:absolute;width:16px;height:40px;background:var(--gold3);border-radius:50% 50% 20% 20%;bottom:0;left:50%;transform:translateX(-50%)}
+
+/* particles */
+.particle{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--gold2);opacity:0;animation:partFloat 2s ease-out infinite}
+@keyframes partFloat{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--px),var(--py)) scale(0)}}
+
+/* ===== STEP CONTENT ===== */
+.step-content{width:100%;max-width:480px}
+
+.step-header{text-align:center;margin-bottom:1.5rem;animation:fadeUp .6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.step-num-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:50%;
+  border:2px solid var(--gold);color:var(--gold);
+  font-family:'Cinzel',serif;font-size:14px;font-weight:600;
+  margin-bottom:8px;
+}
+.step-title{font-size:22px;font-weight:500;color:var(--gold2);margin-bottom:4px}
+.step-sub{font-family:'Cinzel',serif;font-size:11px;color:var(--mute);letter-spacing:2px;text-transform:uppercase}
+
+/* ===== MANTRA BOX ===== */
+.mantra-box{
+  background:var(--s2);border:1px solid var(--gold);border-radius:16px;
+  padding:1.2rem;margin-bottom:1.2rem;
+  animation:fadeUp .6s ease .1s both;
+}
+.mantra-label{font-family:'Cinzel',serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.mantra-text{font-size:18px;line-height:1.9;color:var(--gold2);margin-bottom:6px}
+.mantra-meaning{font-size:13px;color:var(--mute);line-height:1.6;margin-bottom:10px}
+.mantra-btns{display:flex;gap:8px;flex-wrap:wrap}
+.m-btn{
+  padding:6px 14px;border-radius:14px;border:1px solid var(--gold);
+  background:transparent;color:var(--gold);font-size:12px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:5px;transition:all .2s;
+  font-family:'Tiro Devanagari Hindi',serif;
+}
+.m-btn:hover,.m-btn.playing{background:var(--gold);color:#000}
+.m-btn.loop-on{background:var(--saf);border-color:var(--saf);color:#fff}
+
+/* ===== ITEMS CHECKLIST ===== */
+.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:1.2rem;animation:fadeUp .6s ease .15s both}
+.item-chip{
+  background:var(--s2);border:1px solid var(--bdr);border-radius:12px;
+  padding:10px 8px;text-align:center;cursor:pointer;transition:all .2s;
+  position:relative;
+}
+.item-chip.checked{background:var(--green);border-color:var(--greenb)}
+.item-chip span{display:block;font-size:22px;margin-bottom:4px}
+.item-chip p{font-size:12px;color:var(--cream);line-height:1.3}
+.item-chip .tick{
+  position:absolute;top:4px;right:4px;width:16px;height:16px;
+  background:var(--greenb);border-radius:50%;color:#fff;
+  font-size:10px;display:none;align-items:center;justify-content:center;
+}
+.item-chip.checked .tick{display:flex}
+
+/* ===== INSTRUCTIONS ===== */
+.instr-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:1.2rem;animation:fadeUp .6s ease .2s both}
+.instr-list li{
+  display:flex;gap:12px;font-size:15px;line-height:1.75;
+  background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:10px 12px;
+  transition:all .3s;cursor:pointer;
+}
+.instr-list li.done{background:var(--green);border-color:var(--greenb)}
+.instr-list li.active-inst{border-color:var(--gold);background:var(--s3)}
+.inst-num{
+  width:24px;height:24px;border-radius:50%;background:var(--bdr);
+  color:var(--mute);font-size:11px;font-family:'Cinzel',serif;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.instr-list li.done .inst-num{background:var(--greenb);color:#fff}
+.instr-list li.active-inst .inst-num{background:var(--gold);color:#000}
+
+/* ===== TIP BOX ===== */
+.tip-box{
+  background:var(--tip);border:1px solid var(--tipb);border-radius:12px;
+  padding:12px 14px;margin-bottom:1.2rem;font-size:14px;color:var(--tipt);
+  line-height:1.7;display:flex;gap:10px;animation:fadeUp .6s ease .25s both;
+}
+
+/* ===== NAV BUTTONS ===== */
+.nav-row{display:flex;gap:10px;padding:1rem;max-width:480px;width:100%;animation:fadeUp .6s ease .3s both}
+.nav-btn{
+  flex:1;padding:14px;border-radius:14px;font-size:14px;font-weight:500;cursor:pointer;
+  border:1px solid var(--bdr);background:var(--s2);color:var(--mute);
+  font-family:'Cinzel',serif;transition:all .2s;
+}
+.nav-btn:hover{border-color:var(--gold);color:var(--gold2)}
+.nav-btn:disabled{opacity:.25;cursor:default}
+.nav-btn.next{
+  background:var(--gold);border-color:var(--gold);color:#000;font-weight:600;font-size:15px;
+  animation:glow 2s ease-in-out infinite;
+}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(201,150,12,0)}50%{box-shadow:0 0 16px 4px rgba(201,150,12,.4)}}
+.nav-btn.next:hover{background:var(--gold2)}
+.nav-btn.complete{background:var(--green);border-color:var(--greenb);color:var(--greent);font-size:15px}
+
+/* ===== CHANT STATUS BAR ===== */
+.chant-bar{
+  background:var(--s3);border-top:1px solid var(--bdr);
+  padding:.6rem 1rem;display:flex;align-items:center;gap:10px;
+  position:sticky;bottom:0;z-index:40;
+}
+.chant-word{font-size:14px;color:var(--gold2);flex:1;font-weight:500}
+.chant-count{font-size:12px;color:var(--mute);font-family:'Cinzel',serif}
+.chant-stop{
+  padding:4px 12px;border-radius:10px;border:1px solid var(--bdr);
+  background:transparent;color:var(--mute);font-size:11px;cursor:pointer;transition:all .2s;
+}
+.chant-stop:hover{border-color:var(--red);color:#e07070}
+#chantBar{display:none}
+
+/* ===== COMPLETION SCREEN ===== */
+#completeScreen{
+  display:none;min-height:100vh;
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;text-align:center;
+}
+.complete-om{font-size:80px;color:var(--gold2);animation:omPulse 2s ease-in-out infinite;margin-bottom:1rem}
+.complete-title{font-family:'Cinzel',serif;font-size:26px;letter-spacing:3px;color:var(--gold2);margin-bottom:.5rem}
+.complete-sub{font-size:18px;color:var(--cream);margin-bottom:.5rem}
+.complete-msg{font-size:15px;color:var(--mute);line-height:1.8;max-width:340px;margin:0 auto 2rem}
+.restart-btn{
+  padding:12px 32px;border-radius:20px;border:2px solid var(--gold);
+  background:transparent;color:var(--gold2);font-size:16px;cursor:pointer;
+  font-family:'Tiro Devanagari Hindi',serif;transition:all .3s;
+}
+.restart-btn:hover{background:var(--gold);color:#000}
+
+/* slide transition */
+.step-scene.slide-out{animation:slideOut .3s ease forwards}
+.step-scene.slide-in{animation:slideIn .4s ease forwards}
+@keyframes slideOut{to{opacity:0;transform:translateX(-40px)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-rings">
+    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--gold2)">ॐ</div>
+  </div>
+  <div class="splash-title">रुद्र अभिषेक</div>
+  <div class="splash-sub">सम्पूर्ण पूजा मार्गदर्शक</div>
+  <button class="start-btn" id="startBtn">पूजा प्रारम्भ करें 🙏</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="tb-om">ॐ</div>
+    <div class="tb-info">
+      <div class="tb-step-label" id="tbLabel">चरण 1 / 12</div>
+      <div class="tb-step-name" id="tbName">स्नान और शुद्धि</div>
+      <div class="tb-prog-outer"><div class="tb-prog-inner" id="tbProg" style="width:8%"></div></div>
+    </div>
+    <div class="tb-count" id="tbCount">1/12</div>
+  </div>
+
+  <!-- STEP AREA -->
+  <div class="step-wrap">
+    <div class="step-scene" id="stepScene">
+      <div class="anim-stage" id="animStage"></div>
+      <div class="step-content" id="stepContent"></div>
+    </div>
+
+    <!-- NAV -->
+    <div class="nav-row" id="navRow">
+      <button class="nav-btn" id="prevBtn" disabled>&#9664; पिछला</button>
+      <button class="nav-btn next" id="nextBtn">अगला &#9654;</button>
+    </div>
+  </div>
+
+  <!-- CHANT STATUS BAR -->
+  <div class="chant-bar" id="chantBar">
+    <div style="font-size:18px">🔔</div>
+    <div class="chant-word" id="chantWord">ॐ नमः शिवाय</div>
+    <div class="chant-count" id="chantCount">जाप चल रहा है...</div>
+    <button class="chant-stop" id="chantStopBtn">■ रोकें</button>
+  </div>
+
+</div>
+
+<!-- COMPLETE -->
+<div id="completeScreen" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center">
+  <div class="complete-om">ॐ</div>
+  <div class="complete-title">हर हर महादेव</div>
+  <div class="complete-sub">पूजा सम्पन्न हुई 🙏</div>
+  <div class="complete-msg">भगवान शिव की कृपा से आपकी रुद्र अभिषेक पूजा पूर्ण हुई।<br>आपके मनोरथ सिद्ध हों।<br>ॐ नमः शिवाय।</div>
+  <button class="restart-btn" id="restartBtn">फिर से करें 🔄</button>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+var STEPS = [
+  {
+    id:"snan",
+    title:"स्नान और शुद्धि",
+    sub:"Snan — Purification",
+    emoji:"🚿",
+    animType:"water",
+    speak:"पहला चरण — स्नान और शुद्धि। पूजा से पहले स्नान करें। यह शरीर और मन की शुद्धि के लिए आवश्यक है।",
+    items:["🧼 साबुन","💧 जल","🪥 दातुन","👔 स्वच्छ वस्त्र"],
+    inst:[
+      "सुबह जल्दी उठें — ब्रह्म मुहूर्त में पूजा सर्वोत्तम है।",
+      "पूरे शरीर का स्नान करें। ठंडा जल उत्तम है।",
+      "दातुन या ब्रश करें। मुख शुद्ध करें।",
+      "स्वच्छ वस्त्र पहनें — सफेद या केसरिया सबसे उचित है।",
+    ],
+    tip:"शुद्ध शरीर में शुद्ध मन — यही पूजा की नींव है।",
+    mantra: null
+  },
+  {
+    id:"samagri",
+    title:"पूजा सामग्री एकत्र करें",
+    sub:"Samagri — Gather Items",
+    emoji:"🧺",
+    animType:"items",
+    speak:"दूसरा चरण — पूजा सामग्री। सभी आवश्यक वस्तुएं एकत्र करें। प्रत्येक वस्तु पर टिक करें।",
+    items:["🫙 कलश","🪔 दीपक","🧈 घी","🥛 दूध","🍯 शहद","🍬 शकर","🌿 बेलपत्र","🌸 फूल","🌹 गुलाब जल","🌾 अक्षत","🥥 नारियल","🍌 केला","⬜ विभूति","🪵 चंदन","🔔 घंटी","🪔 कपूर"],
+    inst:[
+      "सभी वस्तुएं एक थाली में रखें।",
+      "शिव लिंग या प्रतिमा साफ करें।",
+      "तांबे या चाँदी का पात्र लिंग के नीचे रखें।",
+      "दीपक में घी डालें — जलाने के लिए तैयार रखें।",
+    ],
+    tip:"जो वस्तुएं नहीं मिलीं उनके बिना भी पूजा हो सकती है — भाव सबसे जरूरी है।",
+    mantra: null
+  },
+  {
+    id:"sthapana",
+    title:"पूजा स्थान स्थापना",
+    sub:"Sthapana — Set the Altar",
+    emoji:"🕍",
+    animType:"glow",
+    speak:"तीसरा चरण — पूजा स्थान स्थापित करें। शिव लिंग को ऊँचे पीठ पर रखें। दीपक और अगरबत्ती जलाएं।",
+    items:["🛕 शिव लिंग","🕯️ पीठ","🪔 दीपक","🕯️ अगरबत्ती"],
+    inst:[
+      "पूर्व या उत्तर दिशा में मुँह करके बैठें।",
+      "शिव लिंग को ऊँचे पीठ पर स्थापित करें।",
+      "घी का दीपक जलाएं — पूरी पूजा जलता रहे।",
+      "अगरबत्ती जलाएं। घंटी बजाएं।",
+    ],
+    tip:"दीपक का प्रकाश अज्ञान के अंधेरे को दूर करता है।",
+    mantra:{
+      text:"ॐ नमः शिवाय",
+      meaning:"दीपक जलाते समय यह मंत्र बोलें",
+      chantKey:0,
+      loop:false
+    }
+  },
+  {
+    id:"aachaman",
+    title:"आचमन और संकल्प",
+    sub:"Aachaman — Purify & Resolve",
+    emoji:"🙏",
+    animType:"glow",
+    speak:"चौथा चरण — आचमन और संकल्प। तीन बार जल पीते हुए मंत्र बोलें। फिर हाथ में जल लेकर संकल्प करें।",
+    items:["🫙 जल पात्र","🌿 तुलसी पत्र"],
+    inst:[
+      "दाहिने हाथ में जल लें।",
+      "तीन बार पीते हुए बोलें: ॐ अच्युताय नमः, ॐ अनन्ताय नमः, ॐ गोविन्दाय नमः।",
+      "दाहिने हाथ में जल लेकर संकल्प बोलें — अपना नाम, स्थान, तिथि और पूजा का उद्देश्य।",
+      "जल को पूजा पात्र में छोड़ दें।",
+    ],
+    tip:"संकल्प का अर्थ है — मैं यह पूजा किस उद्देश्य से कर रहा हूँ। इसे हृदय से बोलें।",
+    mantra:{
+      text:"ॐ श्री रुद्राय नमः। ॐ श्री महाकालाय नमः। ॐ नमः शिवाय।",
+      meaning:"संकल्प के समय यह मंत्र बोलें",
+      chantKey:0,
+      loop:false
+    }
+  },
+  {
+    id:"avahana",
+    title:"भगवान शिव का आवाहन",
+    sub:"Avahana — Invoke Shiva",
+    emoji:"✨",
+    animType:"particles",
+    speak:"पाँचवाँ चरण — आवाहन। घंटी बजाते हुए शिव लिंग पर फूल अर्पित करें। ध्यान करें कि भगवान शिव यहाँ विराजमान हैं।",
+    inst:[
+      "घंटी बजाएं — नकारात्मकता दूर होती है।",
+      "शिव लिंग पर फूल अर्पित करें।",
+      "आँखें बंद करें — शिव का ध्यान करें: कैलाश पर बैठे, भस्म लगाए, अर्धचंद्र मस्तक पर।",
+      "धूप और दीप तीन बार घड़ी की दिशा में घुमाएं।",
+    ],
+    tip:"आवाहन में मन लगाएं — भगवान आपके भाव देखते हैं, आपकी सामग्री नहीं।",
+    mantra:{
+      text:"ध्यायेत् नित्यं महेशं रजतगिरिनिभं चारु चन्द्रावतंसम्।\nनमामीशमीशान निर्वाण रूपम्।",
+      meaning:"आवाहन मंत्र — शिव का ध्यान करते हुए बोलें",
+      chantKey:3,
+      loop:true,
+      loopLabel:"आवाहन जाप"
+    }
+  },
+  {
+    id:"panchamrit",
+    title:"पंचामृत अभिषेक",
+    sub:"Panchamrita — Five Nectars",
+    emoji:"🫗",
+    animType:"water",
+    speak:"छठा चरण — पंचामृत अभिषेक। पाँच पवित्र द्रव्यों से शिव लिंग पर अभिषेक करें। प्रत्येक के साथ ॐ नमः शिवाय बोलें।",
+    items:["🥛 दूध","🫙 दही","🧈 घी","🍯 शहद","🍬 शकर"],
+    inst:[
+      "🥛 दूध — धीरे-धीरे ऊँचाई से डालें। मन को शुद्ध करता है।",
+      "🫙 दही — समृद्धि और संतान का प्रतीक।",
+      "🧈 घी — ज्ञान और मोक्ष का प्रतीक। सबसे पवित्र।",
+      "🍯 शहद — मीठी वाणी और भक्ति का प्रतीक।",
+      "🍬 शकर जल — पूर्ण सुख का प्रतीक।",
+      "अंत में शुद्ध जल से धो लें।",
+    ],
+    tip:"पंचामृत पाँच इन्द्रियों के प्रतीक हैं। इन्हें चढ़ाना = सब इन्द्रियाँ शिव को अर्पण करना।",
+    mantra:{
+      text:"ॐ नमः शिवाय। ॐ नमः शिवाय। ॐ नमः शिवाय।",
+      meaning:"प्रत्येक द्रव्य चढ़ाते समय यह पञ्चाक्षर मंत्र बोलें",
+      chantKey:0,
+      loop:true,
+      loopLabel:"पंचामृत जाप"
+    }
+  },
+  {
+    id:"jalabhishek",
+    title:"जल अभिषेक",
+    sub:"Jala Abhisheka — Sacred Water",
+    emoji:"🌊",
+    animType:"water",
+    speak:"सातवाँ चरण — जल अभिषेक। शुद्ध जल या गंगाजल लगातार शिव लिंग पर डालें। साथ में महामृत्युञ्जय मंत्र का जाप करें।",
+    items:["🌊 गंगाजल / शुद्ध जल","🌿 बेलपत्र","🌹 गुलाब जल"],
+    inst:[
+      "शिव लिंग पर ठंडा शुद्ध जल लगातार डालें।",
+      "जल डालते समय महामृत्युञ्जय मंत्र बोलें।",
+      "बेलपत्र तीन-तीन के समूह में चढ़ाएं — डंठल अपनी ओर।",
+      "अंत में गुलाब जल से सुगंधित अभिषेक करें।",
+    ],
+    tip:"जल का अटूट प्रवाह = अखंड भक्ति। मन को जल जैसा शिव की ओर बहने दें।",
+    mantra:{
+      text:"ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।\nउर्वारुकमिव बन्धनान् मृत्योर्मुक्षीय माऽमृतात्।",
+      meaning:"महामृत्युञ्जय मंत्र — जल अभिषेक के समय बोलें",
+      chantKey:1,
+      loop:true,
+      loopLabel:"जल अभिषेक जाप"
+    }
+  },
+  {
+    id:"bilva",
+    title:"बेलपत्र और पुष्प अर्पण",
+    sub:"Bilva Archana — Sacred Leaves",
+    emoji:"🌿",
+    animType:"glow",
+    speak:"आठवाँ चरण — बेलपत्र और पुष्प अर्पण। त्रिदल बेलपत्र शिव को अत्यंत प्रिय है। ११ या १०८ बेलपत्र अर्पित करें।",
+    items:["🌿 बेलपत्र","🌸 फूल","🌾 अक्षत","🌹 गुलाब"],
+    inst:[
+      "बेलपत्र साफ, अखंडित हो। डंठल अपनी ओर रखें।",
+      "तीन-तीन के समूह में चढ़ाएं — ब्रह्मा, विष्णु, महेश के प्रतीक।",
+      "प्रत्येक बेलपत्र के साथ ॐ नमः शिवाय बोलें।",
+      "फूल, अक्षत और गुलाब के पंखुड़ियाँ भी अर्पित करें।",
+    ],
+    tip:"एक बेलपत्र = हजार कमल के बराबर। शिव बेलपत्र से अत्यंत प्रसन्न होते हैं।",
+    mantra:{
+      text:"ॐ नमः शिवाय।\nत्रिदलं त्रिगुणाकारं त्रिनेत्रं च त्रयायुधम्।",
+      meaning:"बेलपत्र चढ़ाते समय यह मंत्र बोलें",
+      chantKey:2,
+      loop:true,
+      loopLabel:"बेलपत्र जाप"
+    }
+  },
+  {
+    id:"namakam",
+    title:"श्री रुद्रम — नमकम",
+    sub:"Namakam — Shri Rudram",
+    emoji:"📿",
+    animType:"particles",
+    speak:"नौवाँ चरण — नमकम पाठ। यजुर्वेद का श्री रुद्रम पढ़ें। यदि संभव न हो तो महामृत्युञ्जय मंत्र या ॐ नमः शिवाय का जाप करें।",
+    inst:[
+      "श्री रुद्रम के ११ अनुवाक पढ़ें।",
+      "यदि पाठ न आए तो महामृत्युञ्जय मंत्र बोलें।",
+      "या ॐ नमः शिवाय का १०८ बार जाप करें।",
+      "जाप के समय रुद्राक्ष माला का उपयोग करें।",
+    ],
+    tip:"मंत्र की शक्ति उसके अर्थ को समझकर और श्रद्धा से बोलने में है।",
+    mantra:{
+      text:"नमस्ते रुद्र मन्यव उतो त इषवे नमः।\nनमस्ते अस्तु धन्वने बाहुभ्यामुत ते नमः।",
+      meaning:"नमकम का प्रथम अनुवाक — शुरू करने से पहले बोलें",
+      chantKey:1,
+      loop:true,
+      loopLabel:"रुद्रम जाप"
+    }
+  },
+  {
+    id:"alankara",
+    title:"अलंकार — शिव श्रृंगार",
+    sub:"Alankara — Adorn Shiva",
+    emoji:"✨",
+    animType:"glow",
+    speak:"दसवाँ चरण — शिव का श्रृंगार। विभूति से त्रिपुण्ड, चंदन और पुष्पमाला अर्पित करें।",
+    items:["⬜ विभूति","🪵 चंदन","🌸 माला","🌾 अक्षत","🥥 नारियल"],
+    inst:[
+      "शिव लिंग को स्वच्छ वस्त्र से धीरे से पोंछें।",
+      "विभूति से तीन क्षैतिज रेखाएं (त्रिपुण्ड) बनाएं।",
+      "अनामिका से गोलाकार चंदन का लेप लगाएं।",
+      "सफेद पुष्पमाला चढ़ाएं। अक्षत और नारियल अर्पित करें।",
+    ],
+    tip:"विभूति (भस्म) मृत्यु का स्मरण कराती है — अहंकार को जलाती है।",
+    mantra:{
+      text:"ॐ नमः शिवाय।\nश्री रुद्राय नमः। श्री महादेवाय नमः।",
+      meaning:"श्रृंगार करते समय यह मंत्र बोलें",
+      chantKey:0,
+      loop:true,
+      loopLabel:"अलंकार जाप"
+    }
+  },
+  {
+    id:"naivedya",
+    title:"नैवेद्य और आरती",
+    sub:"Naivedya & Arati — Offering",
+    emoji:"🪔",
+    animType:"flame",
+    speak:"ग्यारहवाँ चरण — नैवेद्य और आरती। फल और मिठाई का भोग लगाएं। फिर कपूर की आरती करें।",
+    items:["🍌 फल","🥥 नारियल","🍬 मिठाई","🪔 कपूर","🔔 घंटी"],
+    inst:[
+      "फल, नारियल और मिठाई का नैवेद्य अर्पित करें।",
+      "कपूर या घी का दीपक जलाएं।",
+      "सात बार चरणों में, चार बार नाभि में, दो बार मुख पर, सात बार पूरे स्वरूप पर घुमाएं।",
+      "आरती के समय घंटी बजाएं।",
+      "ज्योति सभी को दिखाएं — प्रकाश का प्रसाद।",
+    ],
+    tip:"आरती में दीपक की लौ परमात्मा को समर्पित अहंकार की अग्नि है।",
+    mantra:{
+      text:"जय शिव ओंकारा, हर शिव ओंकारा।\nब्रह्मा विष्णु सदाशिव, अर्धांगी धारा।",
+      meaning:"आरती के समय यह भजन गाएं",
+      chantKey:5,
+      loop:true,
+      loopLabel:"आरती"
+    }
+  },
+  {
+    id:"visarjan",
+    title:"प्रदक्षिणा और विसर्जन",
+    sub:"Pradakshina & Visarjana",
+    emoji:"🔄",
+    animType:"particles",
+    speak:"बारहवाँ और अंतिम चरण — प्रदक्षिणा और विसर्जन। शिव लिंग की परिक्रमा करें। साष्टांग प्रणाम करें। तीर्थ जल ग्रहण करें।",
+    inst:[
+      "शिव लिंग की ३, ७ या ११ परिक्रमा करें — लिंग दाहिनी ओर।",
+      "नमः शिवाय बोलते हुए धीरे-धीरे चलें।",
+      "साष्टांग प्रणाम करें — आठ अंग भूमि से लगाएं।",
+      "अभिषेक जल (तीर्थ) सिर पर लें और परिवार को दें।",
+      "प्रसाद वितरित करें।",
+      "पाँच मिनट मौन ध्यान में बैठें।",
+    ],
+    tip:"पूजा का फल तुरंत नहीं दिखता। शिव पर विश्वास रखें — कृपा अवश्य मिलती है।",
+    mantra:{
+      text:"ॐ नमः शिवाय।\nयानि कानि च पापानि जन्मान्तरकृतानि च।\nतानि तानि विनश्यन्ति प्रदक्षिणे पदे पदे।",
+      meaning:"परिक्रमा के समय यह मंत्र बोलें",
+      chantKey:0,
+      loop:true,
+      loopLabel:"विसर्जन जाप"
+    }
+  }
+];
+
+var MANTRAS_CHANT = [
+  {name:"ॐ नमः शिवाय", text:"ॐ नमः शिवाय ॐ नमः शिवाय ॐ नमः शिवाय ॐ नमः शिवाय ॐ नमः शिवाय"},
+  {name:"महामृत्युञ्जय मंत्र", text:"ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम् उर्वारुकमिव बन्धनान् मृत्योर्मुक्षीय माऽमृतात्"},
+  {name:"नमः शिवाय", text:"नमः शिवाय नमः शिवाय नमः शिवाय नमः शिवाय नमः शिवाय"},
+  {name:"रुद्राष्टकम्", text:"नमामीशमीशान निर्वाण रूपं विभुं व्यापकं ब्रह्म वेद स्वरूपम् निजं निर्गुणं निर्विकल्पं निरीहं चिदाकाश माकाशवासं भजेऽहम्"},
+  {name:"शिव गायत्री", text:"ॐ तत्पुरुषाय विद्महे महादेवाय धीमहि तन्नो रुद्रः प्रचोदयात्"},
+  {name:"जय शिव ओंकारा", text:"जय शिव ओंकारा हर शिव ओंकारा ब्रह्मा विष्णु सदाशिव अर्धांगी धारा"}
+];
+
+// ============================================================
+// STATE
+// ============================================================
+var cur = 0;
+var chanting = false;
+var chantTimer = null;
+var vizTimer = null;
+var synth = window.speechSynthesis;
+var hv = null;
+var chantCount = 0;
+var ttsOn = false;
+
+// ============================================================
+// VOICE LOADING
+// ============================================================
+function loadVoice() {
+  var voices = synth.getVoices();
+  for (var i = 0; i < voices.length; i++) {
+    if (voices[i].lang === 'hi-IN') { hv = voices[i]; return; }
+  }
+  for (var i = 0; i < voices.length; i++) {
+    if (voices[i].lang.indexOf('hi') === 0) { hv = voices[i]; return; }
+  }
+  if (voices.length > 0) hv = voices[0];
+}
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoice;
+setTimeout(loadVoice, 200);
+setTimeout(loadVoice, 700);
+setTimeout(loadVoice, 1500);
+
+function speakOnce(txt, rate, onEnd) {
+  synth.cancel();
+  setTimeout(function() {
+    var u = new SpeechSynthesisUtterance(txt);
+    u.lang = 'hi-IN';
+    if (hv) u.voice = hv;
+    u.rate = rate || 0.78;
+    u.pitch = 0.92;
+    u.volume = 1.0;
+    u.onend = onEnd || function(){};
+    u.onerror = function(e) { if (e.error !== 'interrupted' && onEnd) onEnd(); };
+    synth.speak(u);
+  }, 80);
+}
+
+// ============================================================
+// CHANTING ENGINE
+// ============================================================
+function doChant() {
+  if (!chanting) return;
+  var step = STEPS[cur];
+  var key = step.mantra ? step.mantra.chantKey : 0;
+  var m = MANTRAS_CHANT[key];
+  chantCount++;
+  document.getElementById('chantWord').textContent = m.name;
+  document.getElementById('chantCount').textContent = 'जाप क्रमांक: ' + chantCount;
+  speakOnce(m.text, 0.72, function() {
+    if (chanting) setTimeout(doChant, 500);
+  });
+}
+
+function startChant(label) {
+  loadVoice();
+  chanting = true;
+  chantCount = 0;
+  document.getElementById('chantBar').style.display = 'flex';
+  if (label) document.getElementById('chantWord').textContent = label;
+  startViz();
+  doChant();
+}
+
+function stopChant() {
+  chanting = false;
+  synth.cancel();
+  clearInterval(vizTimer);
+  document.getElementById('chantBar').style.display = 'none';
+  // reset loop buttons
+  var loopBtns = document.querySelectorAll('.m-btn.loop-on');
+  for (var i = 0; i < loopBtns.length; i++) {
+    loopBtns[i].classList.remove('loop-on');
+    loopBtns[i].textContent = '🔁 जाप शुरू';
+  }
+  stopViz();
+}
+
+function startViz() {
+  clearInterval(vizTimer);
+  vizTimer = setInterval(function() {
+    var bars = document.querySelectorAll('.vb');
+    for (var i = 0; i < bars.length; i++) {
+      bars[i].style.height = (4 + Math.random() * 22) + 'px';
+      bars[i].classList.add('on');
+    }
+  }, 180);
+}
+
+function stopViz() {
+  clearInterval(vizTimer);
+  var bars = document.querySelectorAll('.vb');
+  for (var i = 0; i < bars.length; i++) {
+    bars[i].style.height = '4px';
+    bars[i].classList.remove('on');
+  }
+}
+
+document.getElementById('chantStopBtn').addEventListener('click', stopChant);
+
+// ============================================================
+// ANIMATIONS
+// ============================================================
+function buildAnim(type) {
+  var stage = document.getElementById('animStage');
+  stage.innerHTML = '';
+
+  if (type === 'water') {
+    var s = STEPS[cur];
+    var icon = document.createElement('div');
+    icon.className = 'anim-icon';
+    icon.textContent = s.emoji;
+    stage.appendChild(icon);
+    var drops = document.createElement('div');
+    drops.className = 'drops-wrap';
+    for (var i = 0; i < 12; i++) {
+      var d = document.createElement('div');
+      d.className = 'drop';
+      d.style.left = (10 + Math.random() * 80) + '%';
+      d.style.animationDelay = (Math.random() * 1.5) + 's';
+      d.style.animationDuration = (1 + Math.random() * 0.8) + 's';
+      drops.appendChild(d);
+    }
+    stage.appendChild(drops);
+
+  } else if (type === 'flame') {
+    var fw = document.createElement('div');
+    fw.className = 'flame-wrap';
+    fw.style.cssText = 'position:absolute;bottom:20px;left:50%;transform:translateX(-50%)';
+    var fl = document.createElement('div');
+    fl.className = 'flame';
+    fw.appendChild(fl);
+    stage.appendChild(fw);
+    var omtxt = document.createElement('div');
+    omtxt.style.cssText = 'position:absolute;top:20px;font-size:48px;color:var(--gold2);animation:omPulse 2s ease-in-out infinite';
+    omtxt.textContent = 'ॐ';
+    stage.appendChild(omtxt);
+
+  } else if (type === 'particles') {
+    var omP = document.createElement('div');
+    omP.style.cssText = 'font-size:64px;color:var(--gold2);animation:omPulse 2s ease-in-out infinite;z-index:2;position:relative';
+    omP.textContent = STEPS[cur].emoji;
+    stage.appendChild(omP);
+    for (var p = 0; p < 8; p++) {
+      var pt = document.createElement('div');
+      pt.className = 'particle';
+      var angle = (p / 8) * Math.PI * 2;
+      pt.style.setProperty('--px', Math.cos(angle) * 60 + 'px');
+      pt.style.setProperty('--py', Math.sin(angle) * 60 + 'px');
+      pt.style.left = '50%'; pt.style.top = '50%';
+      pt.style.animationDelay = (p * 0.3) + 's';
+      stage.appendChild(pt);
+    }
+    var r1=document.createElement('div'),r2=document.createElement('div'),r3=document.createElement('div');
+    r1.className=r2.className=r3.className='anim-ring';
+    stage.appendChild(r1);stage.appendChild(r2);stage.appendChild(r3);
+
+  } else {
+    // glow default
+    var ic = document.createElement('div');
+    ic.className = 'anim-icon';
+    ic.textContent = STEPS[cur].emoji;
+    stage.appendChild(ic);
+    var r1=document.createElement('div'),r2=document.createElement('div'),r3=document.createElement('div');
+    r1.className=r2.className=r3.className='anim-ring';
+    stage.appendChild(r1);stage.appendChild(r2);stage.appendChild(r3);
+  }
+
+  // viz bars inside stage
+  var vizRow = document.createElement('div');
+  vizRow.style.cssText = 'position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:3px;align-items:flex-end;height:20px';
+  for (var b = 0; b < 9; b++) {
+    var bar = document.createElement('div');
+    bar.className = 'vb';
+    vizRow.appendChild(bar);
+  }
+  stage.appendChild(vizRow);
+}
+
+// ============================================================
+// RENDER STEP
+// ============================================================
+function renderStep(idx, dir) {
+  var s = STEPS[idx];
+  var scene = document.getElementById('stepScene');
+
+  // stop chanting when moving
+  stopChant();
+  if (ttsOn) { synth.cancel(); ttsOn = false; }
+
+  // update topbar
+  document.getElementById('tbLabel').textContent = 'चरण ' + (idx+1) + ' / ' + STEPS.length;
+  document.getElementById('tbName').textContent = s.title;
+  document.getElementById('tbCount').textContent = (idx+1) + '/' + STEPS.length;
+  document.getElementById('tbProg').style.width = Math.round((idx+1)/STEPS.length*100) + '%';
+
+  // update nav buttons
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  prevBtn.disabled = (idx === 0);
+  if (idx === STEPS.length - 1) {
+    nextBtn.textContent = '🙏 पूजा सम्पन्न';
+    nextBtn.className = 'nav-btn complete';
+  } else {
+    nextBtn.textContent = 'अगला ▶';
+    nextBtn.className = 'nav-btn next';
+  }
+
+  // animate scene
+  scene.className = 'step-scene';
+  if (dir === 'next') {
+    scene.classList.add('slide-out');
+    setTimeout(function() {
+      buildScene(s, scene);
+      scene.className = 'step-scene slide-in';
+      speakStep(s);
+    }, 280);
+  } else if (dir === 'prev') {
+    scene.style.animation = 'slideOut .3s ease forwards';
+    setTimeout(function() {
+      buildScene(s, scene);
+      scene.className = 'step-scene';
+      scene.style.animation = 'slideIn .4s ease forwards';
+      speakStep(s);
+    }, 280);
+  } else {
+    buildScene(s, scene);
+    speakStep(s);
+  }
+}
+
+function speakStep(s) {
+  ttsOn = true;
+  speakOnce(s.speak, 0.82, function() { ttsOn = false; });
+}
+
+function buildScene(s, scene) {
+  buildAnim(s.animType);
+
+  var content = document.getElementById('stepContent');
+  var html = '';
+
+  // header
+  html += '<div class="step-header">';
+  html += '<div class="step-num-badge">' + (STEPS.indexOf(s)+1) + '</div>';
+  html += '<div class="step-title">' + s.title + '</div>';
+  html += '<div class="step-sub">' + s.sub + '</div>';
+  html += '</div>';
+
+  // mantra box
+  if (s.mantra) {
+    html += '<div class="mantra-box">';
+    html += '<div class="mantra-label">🔔 ' + s.mantra.meaning + '</div>';
+    html += '<div class="mantra-text">' + s.mantra.text.replace(/\n/g,'<br>') + '</div>';
+    html += '<div class="mantra-btns">';
+    html += '<button class="m-btn" data-once="1" data-key="' + s.mantra.chantKey + '">▶ एक बार सुनें</button>';
+    if (s.mantra.loop) {
+      html += '<button class="m-btn" data-loop="1" data-key="' + s.mantra.chantKey + '" data-label="' + (s.mantra.loopLabel||s.title) + '">🔁 जाप शुरू</button>';
+    }
+    html += '</div></div>';
+  }
+
+  // items checklist
+  if (s.items) {
+    html += '<div class="mantra-label" style="margin-bottom:8px;font-family:Cinzel,serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--gold)">✅ आवश्यक सामग्री — टिक करें</div>';
+    html += '<div class="items-grid">';
+    for (var i = 0; i < s.items.length; i++) {
+      var parts = s.items[i].split(' ');
+      var em = parts[0], nm = parts.slice(1).join(' ');
+      html += '<div class="item-chip" data-idx="'+i+'"><div class="tick">✓</div><span>'+em+'</span><p>'+nm+'</p></div>';
+    }
+    html += '</div>';
+  }
+
+  // instructions
+  html += '<ul class="instr-list">';
+  for (var j = 0; j < s.inst.length; j++) {
+    html += '<li data-iidx="'+j+'" class="' + (j===0?'active-inst':'') + '"><span class="inst-num">'+(j+1)+'</span><span>'+s.inst[j]+'</span></li>';
+  }
+  html += '</ul>';
+
+  // tip
+  if (s.tip) {
+    html += '<div class="tip-box">💡 <span>' + s.tip + '</span></div>';
+  }
+
+  content.innerHTML = html;
+
+  // attach item chip events
+  var chips = content.querySelectorAll('.item-chip');
+  for (var c = 0; c < chips.length; c++) {
+    chips[c].addEventListener('click', function() {
+      this.classList.toggle('checked');
+    });
+  }
+
+  // attach instruction click events
+  var instItems = content.querySelectorAll('.instr-list li');
+  for (var ii = 0; ii < instItems.length; ii++) {
+    instItems[ii].addEventListener('click', function() {
+      this.classList.toggle('done');
+      this.classList.remove('active-inst');
+      // highlight next
+      var next = this.nextElementSibling;
+      if (next) next.classList.add('active-inst');
+    });
+  }
+
+  // mantra button events
+  var onceBtns = content.querySelectorAll('.m-btn[data-once]');
+  for (var ob = 0; ob < onceBtns.length; ob++) {
+    onceBtns[ob].addEventListener('click', function() {
+      stopChant();
+      var key = parseInt(this.getAttribute('data-key'));
+      var mc = MANTRAS_CHANT[key];
+      this.classList.add('playing');
+      var self = this;
+      speakOnce(mc.text, 0.72, function() { self.classList.remove('playing'); });
+    });
+  }
+
+  var loopBtns = content.querySelectorAll('.m-btn[data-loop]');
+  for (var lb = 0; lb < loopBtns.length; lb++) {
+    loopBtns[lb].addEventListener('click', function() {
+      if (chanting) {
+        stopChant();
+        this.textContent = '🔁 जाप शुरू';
+        this.classList.remove('loop-on');
+      } else {
+        var key = parseInt(this.getAttribute('data-key'));
+        var label = this.getAttribute('data-label') || '';
+        // override current step's mantra key
+        STEPS[cur].mantra.chantKey = key;
+        startChant(label);
+        this.textContent = '■ जाप रोकें';
+        this.classList.add('loop-on');
+      }
+    });
+  }
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+document.getElementById('prevBtn').addEventListener('click', function() {
+  if (cur > 0) { cur--; renderStep(cur, 'prev'); }
+});
+
+document.getElementById('nextBtn').addEventListener('click', function() {
+  if (cur < STEPS.length - 1) {
+    cur++;
+    renderStep(cur, 'next');
+  } else {
+    // complete
+    stopChant();
+    document.getElementById('app').style.display = 'none';
+    var cs = document.getElementById('completeScreen');
+    cs.style.display = 'flex';
+    speakOnce('पूजा सम्पन्न हुई। हर हर महादेव। ॐ नमः शिवाय।', 0.8, null);
+  }
+});
+
+document.getElementById('restartBtn').addEventListener('click', function() {
+  cur = 0;
+  document.getElementById('completeScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  renderStep(0, null);
+});
+
+// ============================================================
+// SPLASH → START
+// ============================================================
+document.getElementById('startBtn').addEventListener('click', function() {
+  loadVoice();
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(function() {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    renderStep(0, null);
+  }, 900);
+});
+</script>
+</body>
+</html>

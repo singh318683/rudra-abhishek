@@ -1,0 +1,12 @@
+{
+  "name": "rudra-abhishek",
+  "version": "1.0.0",
+  "description": "Rudra Abhishek Pooja Guide",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
