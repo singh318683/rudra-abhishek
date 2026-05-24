@@ -276,6 +276,7 @@ html,body{background:var(--bg);color:var(--cream);font-family:'Tiro Devanagari H
 }
 .instr-list li.revealed{
   animation:instrSlideIn .5s cubic-bezier(.34,1.4,.64,1) forwards;
+  opacity:1;
 }
 @keyframes instrSlideIn{
   0%  {opacity:0;transform:translateX(-50px) scale(0.92)}
@@ -306,15 +307,17 @@ html,body{background:var(--bg);color:var(--cream);font-family:'Tiro Devanagari H
 .instr-list li.active-inst .inst-num{background:var(--gold) !important;color:#000 !important;animation:numPop .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes numPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
 
-/* done — green check, text stays fully visible */
+/* done — green check, text stays fully visible, NEVER hides */
 .instr-list li.done{
+  opacity:1 !important;
+  transform:translateX(0) scale(1) !important;
   background:linear-gradient(135deg,#081808 0%,#051205 100%) !important;
   border-color:rgba(45,122,45,0.6) !important;
   box-shadow:none !important;
   animation:none !important;
 }
 .instr-list li.done .inst-num{background:var(--greenb) !important;color:#fff !important}
-.instr-list li.done .inst-text{color:var(--cream) !important;text-decoration:none !important}
+.instr-list li.done .inst-text{color:var(--cream) !important;text-decoration:none !important;opacity:1 !important}
 
 /* number badge */
 .inst-num{
